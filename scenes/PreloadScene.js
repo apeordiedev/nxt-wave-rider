@@ -1,0 +1,62 @@
+import { createProceduralTextures, createHeroAnimations } from "../utils/TextureFactory.js";
+
+export class PreloadScene extends Phaser.Scene {
+  constructor() {
+    super("PreloadScene");
+  }
+
+  preload() {
+    const { width, height } = this.scale;
+    const barBg = this.add.rectangle(width * 0.5, height * 0.55, width * 0.72, 22, 0x0f1a13, 0.85);
+    const bar = this.add.rectangle(
+      width * 0.14,
+      height * 0.55,
+      0,
+      14,
+      0x7cff33,
+      1
+    ).setOrigin(0, 0.5);
+    const title = this.add
+      .text(width * 0.5, height * 0.42, "NXT WAVE RIDER", {
+        fontFamily: "Arial Black, Impact, sans-serif",
+        fontSize: "36px",
+        color: "#7cff33",
+        stroke: "#000000",
+        strokeThickness: 5,
+      })
+      .setOrigin(0.5);
+    const subtitle = this.add
+      .text(width * 0.5, height * 0.49, "Loading Surge systems...", {
+        fontFamily: "Arial, sans-serif",
+        fontSize: "18px",
+        color: "#ccffd6",
+      })
+      .setOrigin(0.5);
+
+    // If the official attached art is present, place it as assets/surge-reference.png.
+    // The SVG fallback keeps the game playable out-of-the-box.
+    this.load.image("surge-reference-png", "assets/surge-reference.png");
+    this.load.svg("surge-reference-svg", "assets/surge-reference.svg");
+
+    this.load.on("progress", (value) => {
+      bar.width = (width * 0.72 - 12) * value;
+    });
+
+    this.load.once("complete", () => {
+      barBg.destroy();
+      bar.destroy();
+      title.destroy();
+      subtitle.destroy();
+    });
+  }
+
+  create() {
+    createProceduralTextures(this);
+    createHeroAnimations(this);
+    const referenceKey = this.textures.exists("surge-reference-png")
+      ? "surge-reference-png"
+      : "surge-reference-svg";
+    this.registry.set("surgeReferenceKey", referenceKey);
+    this.scene.start("MenuScene");
+  }
+}
