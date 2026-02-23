@@ -18,13 +18,14 @@ Production-ready, mobile-first Telegram Mini App endless vertical wave survival 
 - Dynamic "Sushi Surf style" wave stack:
   - Multi-layer parallax cyber ocean
   - Rolling crest motion
-  - Foam + mist particles
-  - Neon edge glow
+  - Foam + mist + gold spark particles
+  - Neon edge glow + cyber-rain background code lines
 - Hero state animation set:
   - Surf
   - Energy surge
   - Glide/carve
   - Death frame + explosion FX
+  - Built from an in-game generated sprite sheet (`surge-sheet`, 192x192 frames)
 - Gameplay systems:
   - Endless speed ramp (every 10 seconds)
   - Pooled obstacles
@@ -70,21 +71,27 @@ Production-ready, mobile-first Telegram Mini App endless vertical wave survival 
     WaveBackground.js
 ```
 
-## Hero art usage (exact attached image)
+## Surge sprite sheet details
 
-The preload scene attempts to load:
-
-- `assets/surge-reference.png` (preferred exact attached art if provided)
-
-Fallback is included as:
-
-- `assets/surge-reference.svg`
-
-To use your exact attached Surge image, replace/add:
+Surge is rendered from a runtime-built sprite sheet in:
 
 ```text
-assets/surge-reference.png
+utils/TextureFactory.js
 ```
+
+The function `buildSurgeSpriteSheet()` composes 7 frames:
+
+1. Surf A
+2. Surf B
+3. Glide A
+4. Glide B
+5. Energy surge A
+6. Energy surge B
+7. Death
+
+This keeps the game self-contained (single-page deploy, no external art dependency) while matching the black armor + neon green + gold particle aesthetic from the reference.
+
+If you later want to replace with your exact hand-authored frames, update `buildSurgeSpriteSheet()` to copy from your PNG sprite strip and keep animation keys unchanged.
 
 ## Run locally
 

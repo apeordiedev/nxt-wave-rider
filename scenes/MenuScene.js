@@ -28,13 +28,13 @@ export class MenuScene extends Phaser.Scene {
       .text(width * 0.5, 68, "NXT WAVE RIDER", {
         fontFamily: "Arial Black, Impact, sans-serif",
         fontSize: `${Math.max(40, Math.floor(width * 0.09))}px`,
-        color: "#8bff42",
+        color: "#aaff74",
         stroke: "#000000",
         strokeThickness: 8,
         shadow: {
           offsetX: 0,
           offsetY: 0,
-          color: "#60ff8e",
+          color: "#9eff84",
           blur: 16,
           stroke: true,
           fill: true,
@@ -47,22 +47,18 @@ export class MenuScene extends Phaser.Scene {
       .text(width * 0.5, 120, "Ride the cyber wave forever", {
         fontFamily: "Arial, sans-serif",
         fontSize: "18px",
-        color: "#d7ffe2",
+        color: "#f1ffd2",
       })
       .setOrigin(0.5)
       .setDepth(20);
 
-    const referenceKey = this.registry.get("surgeReferenceKey") || "";
-    const hasReference = referenceKey && this.textures.exists(referenceKey);
-    const hero = this.add
-      .image(width * 0.5, height * 0.38, hasReference ? referenceKey : "surge-surf-1")
-      .setDepth(18);
+    const keyArt = this.add.image(width * 0.5, height * 0.37, "surge-keyart").setDepth(17);
+    keyArt.setScale(Math.min(width * 0.00125, 0.54));
+    keyArt.setAlpha(0.68);
 
-    if (hasReference) {
-      hero.setScale(Math.min(width * 0.0014, 0.65));
-    } else {
-      hero.setScale(1.35);
-    }
+    const hero = this.add.sprite(width * 0.5, height * 0.4, "surge-sheet", 1).setDepth(18);
+    hero.play("surge-surf");
+    hero.setScale(Math.min(width * 0.0034, 1.2));
 
     this.tweens.add({
       targets: hero,
@@ -123,23 +119,23 @@ export class MenuScene extends Phaser.Scene {
 
   createButton(x, y, w, h, label, onTap, muted = false) {
     const bg = this.add
-      .rectangle(x, y, w, h, muted ? 0x0e1514 : 0x163a20, 0.92)
-      .setStrokeStyle(3, 0x7cff33, 1)
+      .rectangle(x, y, w, h, muted ? 0x101812 : 0x132a1a, 0.93)
+      .setStrokeStyle(3, muted ? 0x84ff43 : 0xffd95e, 0.94)
       .setDepth(25)
       .setInteractive({ useHandCursor: true });
     const text = this.add
       .text(x, y, label, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "28px",
-        color: muted ? "#c3ffd4" : "#e9ffe9",
+        color: muted ? "#daffd6" : "#fff0a5",
         stroke: "#000000",
         strokeThickness: 5,
       })
       .setOrigin(0.5)
       .setDepth(26);
 
-    const hover = () => bg.setFillStyle(muted ? 0x152121 : 0x24552f, 0.95);
-    const out = () => bg.setFillStyle(muted ? 0x0e1514 : 0x163a20, 0.92);
+    const hover = () => bg.setFillStyle(muted ? 0x1a2a1e : 0x1d3a24, 0.95);
+    const out = () => bg.setFillStyle(muted ? 0x101812 : 0x132a1a, 0.93);
     bg.on("pointerover", hover);
     bg.on("pointerout", out);
     bg.on("pointerdown", () => {
@@ -152,8 +148,8 @@ export class MenuScene extends Phaser.Scene {
   showLeaderboardPopup() {
     const { width, height } = this.scale;
     const shade = this.add.rectangle(width * 0.5, height * 0.5, width, height, 0x000000, 0.6).setDepth(100);
-    const panel = this.add.rectangle(width * 0.5, height * 0.5, Math.min(430, width * 0.92), 360, 0x07110e, 0.95)
-      .setStrokeStyle(3, 0x7cff33, 1)
+    const panel = this.add.rectangle(width * 0.5, height * 0.5, Math.min(430, width * 0.92), 360, 0x08130f, 0.95)
+      .setStrokeStyle(3, 0x84ff43, 1)
       .setDepth(101);
 
     const title = this.add
@@ -172,15 +168,15 @@ export class MenuScene extends Phaser.Scene {
         .text(width * 0.5, height * 0.41 + idx * 40, `${idx + 1}. ${entry.name}  —  ${entry.score.toLocaleString()} m`, {
           fontFamily: "Arial, sans-serif",
           fontSize: "23px",
-          color: idx === 0 ? "#f5ff9f" : "#d5ffe4",
+          color: idx === 0 ? "#fff3a6" : "#d8ffe3",
         })
         .setOrigin(0.5)
         .setDepth(102)
     );
 
     const close = this.add
-      .rectangle(width * 0.5, height * 0.67, 180, 54, 0x173622, 0.95)
-      .setStrokeStyle(2, 0x7cff33, 1)
+      .rectangle(width * 0.5, height * 0.67, 180, 54, 0x15331f, 0.95)
+      .setStrokeStyle(2, 0xffd95e, 0.92)
       .setDepth(102)
       .setInteractive({ useHandCursor: true });
 

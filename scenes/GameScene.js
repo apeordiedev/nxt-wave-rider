@@ -46,18 +46,18 @@ export class GameScene extends Phaser.Scene {
     this.lastNearMissAt = -9999;
     this.gameEnded = false;
 
-    this.player = this.physics.add.sprite(width * 0.26, height * 0.5, "surge-surf-1");
+    this.player = this.physics.add.sprite(width * 0.26, height * 0.5, "surge-sheet", 0);
     this.player
       .setDepth(50)
-      .setScale(1)
+      .setScale(0.93)
       .setCollideWorldBounds(false)
       .setDamping(false)
       .setDrag(0);
     this.player.play("surge-surf");
-    this.player.body.setSize(62, 108, false);
-    this.player.body.setOffset(49, 26);
+    this.player.body.setSize(80, 128, false);
+    this.player.body.setOffset(56, 30);
 
-    this.playerPulse = this.add.circle(this.player.x, this.player.y, 44, 0x73ff6a, 0.09).setDepth(45);
+    this.playerPulse = this.add.circle(this.player.x, this.player.y, 48, 0x82ff64, 0.09).setDepth(45);
     this.playerPulseBlendTween = this.tweens.add({
       targets: this.playerPulse,
       alpha: { from: 0.06, to: 0.22 },
@@ -92,6 +92,18 @@ export class GameScene extends Phaser.Scene {
       blendMode: "ADD",
       depth: 100,
       tint: [0x7cff33, 0xa4ff89, 0xd6ffcb],
+    });
+
+    this.goldSparkParticles = this.add.particles(0, 0, "particle-goldspark", {
+      speed: { min: 40, max: 210 },
+      lifespan: { min: 180, max: 460 },
+      quantity: 0,
+      gravityY: 180,
+      scale: { start: 0.58, end: 0 },
+      alpha: { start: 0.95, end: 0 },
+      blendMode: "ADD",
+      depth: 102,
+      tint: [0xffdb6d, 0xfff7b7, 0xffc84a],
     });
 
     this.foamParticles = this.add.particles(0, 0, "particle-foam", {
@@ -197,7 +209,7 @@ export class GameScene extends Phaser.Scene {
       .text(16, topY, "DISTANCE: 00000 m", {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "26px",
-        color: "#9dff6a",
+        color: "#a9ff75",
         stroke: "#000000",
         strokeThickness: 5,
       })
@@ -209,7 +221,7 @@ export class GameScene extends Phaser.Scene {
       .text(width * 0.5, topY, "$NXT x 0000", {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "28px",
-        color: "#d8ff66",
+        color: "#ffe17d",
         stroke: "#000000",
         strokeThickness: 5,
       })
@@ -221,7 +233,7 @@ export class GameScene extends Phaser.Scene {
       .text(width * 0.5, topY + 32, "x1", {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "20px",
-        color: "#7cff33",
+        color: "#90ff4b",
         stroke: "#000000",
         strokeThickness: 4,
       })
@@ -233,7 +245,7 @@ export class GameScene extends Phaser.Scene {
       .text(width - 12, topY, `Lifetime $NXT: ${this.progress.lifetimeNxt.toLocaleString()}`, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "23px",
-        color: "#82ff60",
+        color: "#9dff71",
         stroke: "#000000",
         strokeThickness: 4,
         align: "right",
@@ -246,7 +258,7 @@ export class GameScene extends Phaser.Scene {
       .text(width - 12, topY + 28, "→ Future Airdrop Qualifier", {
         fontFamily: "Arial, sans-serif",
         fontSize: "15px",
-        color: "#cbffd7",
+        color: "#e4fbd3",
       })
       .setDepth(300)
       .setScrollFactor(0)
@@ -257,13 +269,13 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(320)
       .setVisible(false);
-    const bannerBg = this.add.rectangle(0, 0, Math.min(420, width * 0.88), 54, 0x0d2315, 0.93).setStrokeStyle(2, 0x7cff33, 1);
+    const bannerBg = this.add.rectangle(0, 0, Math.min(420, width * 0.88), 54, 0x0b170f, 0.93).setStrokeStyle(2, 0xffd95e, 0.9);
     const bannerIcon = this.add.image(-150, 0, "ui-bolt").setScale(0.85);
     this.bannerText = this.add
       .text(4, 0, "x2 LIGHTNING SURGE!", {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "28px",
-        color: "#9fff65",
+        color: "#ffe88a",
         stroke: "#000000",
         strokeThickness: 5,
       })
@@ -271,7 +283,7 @@ export class GameScene extends Phaser.Scene {
     this.multiplierBanner.add([bannerBg, bannerIcon, this.bannerText]);
 
     this.multiplierBarBg = this.add
-      .rectangle(width * 0.5, 132, Math.min(420, width * 0.88), 10, 0x1b2c1c, 0.9)
+      .rectangle(width * 0.5, 132, Math.min(420, width * 0.88), 10, 0x1a2013, 0.9)
       .setScrollFactor(0)
       .setDepth(320)
       .setVisible(false);
@@ -281,7 +293,7 @@ export class GameScene extends Phaser.Scene {
         132,
         this.multiplierBarBg.width,
         8,
-        0x7cff33,
+        0x9fff63,
         1
       )
       .setOrigin(0, 0.5)
@@ -307,7 +319,8 @@ export class GameScene extends Phaser.Scene {
     this.energyParticles.emitParticleAt(this.player.x - 26, this.player.y + 26, 8);
     this.energyParticles.emitParticleAt(this.player.x + 26, this.player.y + 26, 8);
     this.lightningParticles.emitParticleAt(this.player.x, this.player.y - 20, 4);
-    this.flash(0x90ff9b, 0.15, 80);
+    this.goldSparkParticles.emitParticleAt(this.player.x + 8, this.player.y + 10, 5);
+    this.flash(0xb8ff98, 0.17, 80);
     this.sfx.waveWhoosh();
     if (this.telegram) this.telegram.hapticImpact("light");
   }
@@ -472,12 +485,13 @@ export class GameScene extends Phaser.Scene {
     if (this.telegram) this.telegram.hapticImpact("light");
 
     this.energyParticles.emitParticleAt(player.x + Phaser.Math.Between(-8, 8), player.y - 8, 6);
+    this.goldSparkParticles.emitParticleAt(player.x + Phaser.Math.Between(-6, 6), player.y - 6, 4);
 
     const popup = this.add
       .text(coin.x, coin.y - 10, `+${gain}`, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "24px",
-        color: "#f5ff7e",
+        color: "#ffe887",
         stroke: "#000000",
         strokeThickness: 4,
       })
@@ -508,6 +522,7 @@ export class GameScene extends Phaser.Scene {
 
     this.triggerLightningStrike();
     this.sfx.lightningCrack();
+    this.goldSparkParticles.emitParticleAt(player.x, player.y - 24, 16);
     if (this.telegram) this.telegram.hapticImpact("medium");
   }
 
@@ -536,10 +551,11 @@ export class GameScene extends Phaser.Scene {
 
         this.lightningParticles.emitParticleAt(endX, endY, 6);
         this.energyParticles.emitParticleAt(endX, endY, 10);
+        this.goldSparkParticles.emitParticleAt(endX, endY - 6, 6);
       });
     }
 
-    this.flash(0xc7ffd0, 0.3, 140);
+    this.flash(0xd8ffb2, 0.32, 140);
   }
 
   triggerNearMiss(now) {
@@ -552,6 +568,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.energyParticles.emitParticleAt(this.player.x + 18, this.player.y + 20, 10);
+    this.goldSparkParticles.emitParticleAt(this.player.x + 16, this.player.y + 10, 6);
     this.cameras.main.shake(80, 0.0028);
   }
 
@@ -568,8 +585,9 @@ export class GameScene extends Phaser.Scene {
     this.shardParticles.emitParticleAt(this.player.x, this.player.y, 24);
     this.lightningParticles.emitParticleAt(this.player.x, this.player.y, 11);
     this.foamParticles.emitParticleAt(this.player.x + 26, this.player.y + 40, 18);
+    this.goldSparkParticles.emitParticleAt(this.player.x + 6, this.player.y + 8, 12);
 
-    this.flash(0xc8ffcf, 0.35, 210);
+    this.flash(0xd9ffc4, 0.36, 210);
     this.cameras.main.shake(280, 0.006);
     this.sfx.crash();
     if (this.telegram) this.telegram.hapticNotification("error");
@@ -693,6 +711,9 @@ export class GameScene extends Phaser.Scene {
     // Surf foam around board/wave interaction.
     if ((time / 75) % 2 < 1) {
       this.foamParticles.emitParticleAt(this.player.x + 46, this.player.y + 52, 1);
+      if ((time / 140) % 2 < 1) {
+        this.goldSparkParticles.emitParticleAt(this.player.x + 34, this.player.y + 38, 1);
+      }
     }
 
     this.updateHud(time);

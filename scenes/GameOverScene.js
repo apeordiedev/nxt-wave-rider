@@ -35,7 +35,7 @@ export class GameOverScene extends Phaser.Scene {
       .text(width * 0.5, 72, "WAVE OVER", {
         fontFamily: "Arial Black, Impact, sans-serif",
         fontSize: "62px",
-        color: "#8eff56",
+        color: "#a6ff72",
         stroke: "#000000",
         strokeThickness: 8,
       })
@@ -46,21 +46,23 @@ export class GameOverScene extends Phaser.Scene {
       .text(width * 0.5, 124, "Surge got clipped by the chaos. Reload and ride.", {
         fontFamily: "Arial, sans-serif",
         fontSize: "20px",
-        color: "#d8ffe5",
+        color: "#ecffd0",
       })
       .setOrigin(0.5)
       .setDepth(60);
 
     const panelW = Math.min(520, width * 0.92);
     const panel = this.add.rectangle(width * 0.5, height * 0.41, panelW, 260, 0x08130f, 0.96)
-      .setStrokeStyle(3, 0x7cff33, 1)
+      .setStrokeStyle(3, 0x84ff43, 1)
       .setDepth(60);
+
+    this.add.sprite(width * 0.18, panel.y + 32, "surge-sheet", 6).setDepth(61).setScale(0.65).setAlpha(0.72);
 
     this.add
       .text(width * 0.5, panel.y - 92, `Final Score: ${this.result.finalScore.toLocaleString()}`, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "40px",
-        color: "#dcff69",
+        color: "#ffe78a",
         stroke: "#000000",
         strokeThickness: 6,
       })
@@ -71,7 +73,7 @@ export class GameOverScene extends Phaser.Scene {
       .text(width * 0.5, panel.y - 36, `Distance: ${this.result.distance.toLocaleString()} m`, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: "29px",
-        color: "#9dff6d",
+        color: "#a8ff73",
         stroke: "#000000",
         strokeThickness: 5,
       })
@@ -86,7 +88,7 @@ export class GameOverScene extends Phaser.Scene {
         {
           fontFamily: "Arial, sans-serif",
           fontSize: "24px",
-          color: "#d6ffd8",
+          color: "#f0ffce",
         }
       )
       .setOrigin(0.5)
@@ -100,7 +102,7 @@ export class GameOverScene extends Phaser.Scene {
         {
           fontFamily: "Arial, sans-serif",
           fontSize: "22px",
-          color: "#c9ffd5",
+          color: "#d9ffe1",
         }
       )
       .setOrigin(0.5)
@@ -111,7 +113,7 @@ export class GameOverScene extends Phaser.Scene {
         .text(width * 0.5, panel.y + 92, "NEW HIGH SCORE!", {
           fontFamily: "Arial Black, Arial, sans-serif",
           fontSize: "34px",
-          color: "#f3ff8f",
+          color: "#fff19d",
           stroke: "#000000",
           strokeThickness: 6,
         })
@@ -148,15 +150,15 @@ export class GameOverScene extends Phaser.Scene {
 
   createButton(x, y, w, h, label, onClick, alt = false) {
     const bg = this.add
-      .rectangle(x, y, w, h, alt ? 0x111d16 : 0x1a4427, 0.95)
-      .setStrokeStyle(3, 0x7cff33, 1)
+      .rectangle(x, y, w, h, alt ? 0x0f1e16 : 0x122a1a, 0.95)
+      .setStrokeStyle(3, alt ? 0x84ff43 : 0xffd95e, 0.95)
       .setDepth(70)
       .setInteractive({ useHandCursor: true });
     const text = this.add
       .text(x, y, label, {
         fontFamily: "Arial Black, Arial, sans-serif",
         fontSize: w > 420 ? "30px" : "28px",
-        color: "#e8ffe8",
+        color: alt ? "#d9ffe0" : "#fff1aa",
         stroke: "#000000",
         strokeThickness: 5,
       })
@@ -168,8 +170,8 @@ export class GameOverScene extends Phaser.Scene {
       this.time.delayedCall(80, () => bg.setScale(1));
       onClick();
     });
-    bg.on("pointerover", () => bg.setFillStyle(alt ? 0x183123 : 0x235b34, 0.97));
-    bg.on("pointerout", () => bg.setFillStyle(alt ? 0x111d16 : 0x1a4427, 0.95));
+    bg.on("pointerover", () => bg.setFillStyle(alt ? 0x173224 : 0x1a3f26, 0.97));
+    bg.on("pointerout", () => bg.setFillStyle(alt ? 0x0f1e16 : 0x122a1a, 0.95));
 
     return { bg, text };
   }

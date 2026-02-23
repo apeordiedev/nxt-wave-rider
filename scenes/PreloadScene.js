@@ -26,17 +26,12 @@ export class PreloadScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     const subtitle = this.add
-      .text(width * 0.5, height * 0.49, "Loading Surge systems...", {
+      .text(width * 0.5, height * 0.49, "Forging Surge sprite sheet...", {
         fontFamily: "Arial, sans-serif",
         fontSize: "18px",
         color: "#ccffd6",
       })
       .setOrigin(0.5);
-
-    // If the official attached art is present, place it as assets/surge-reference.png.
-    // The SVG fallback keeps the game playable out-of-the-box.
-    this.load.image("surge-reference-png", "assets/surge-reference.png");
-    this.load.svg("surge-reference-svg", "assets/surge-reference.svg");
 
     this.load.on("progress", (value) => {
       bar.width = (width * 0.72 - 12) * value;
@@ -53,10 +48,6 @@ export class PreloadScene extends Phaser.Scene {
   create() {
     createProceduralTextures(this);
     createHeroAnimations(this);
-    const referenceKey = this.textures.exists("surge-reference-png")
-      ? "surge-reference-png"
-      : "surge-reference-svg";
-    this.registry.set("surgeReferenceKey", referenceKey);
     this.scene.start("MenuScene");
   }
 }
